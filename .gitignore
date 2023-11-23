@@ -1,0 +1,6 @@
+venv
+pyvenv.cfg
+db.sqlite3
+lib
+.idea
+bin
