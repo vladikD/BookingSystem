@@ -85,7 +85,7 @@ class RoomListView(APIView):
 class ReservationListView(APIView):
 
     # authentication_classes = [TokenAuthentication]
-    # permission_classes = [IsAuthenticated]
+    #permission_classes = [IsAuthenticated]
     def get(self, request, format=None):
         reservations = Reservation.objects.all()
         serializer = ReservationSerializer(reservations, many=True)
