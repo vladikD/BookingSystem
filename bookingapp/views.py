@@ -13,7 +13,17 @@ from rest_framework.permissions import AllowAny
 from .serializers import UserSerializer
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
+from .serializers import UserRegistrationSerializer
 
+@api_view(['POST'])
+def register_user(request):
+    serializer = UserRegistrationSerializer(data=request.data)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response({'message': 'User registered successfully'}, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -84,7 +94,6 @@ class RoomListView(APIView):
 
 class ReservationListView(APIView):
 
-    # authentication_classes = [TokenAuthentication]
     #permission_classes = [IsAuthenticated]
     def get(self, request, format=None):
         reservations = Reservation.objects.all()
@@ -92,11 +101,13 @@ class ReservationListView(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
+
         serializer = ReservationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class ReservationDetailView(APIView):
 
